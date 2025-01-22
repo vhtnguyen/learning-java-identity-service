@@ -2,7 +2,6 @@ package com.devteria.identity_service.service;
 
 import com.devteria.identity_service.dto.request.AuthenticationRequest;
 import com.devteria.identity_service.dto.response.AuthenticationResponse;
-import com.devteria.identity_service.entity.User;
 import com.devteria.identity_service.exception.AppRuntimeException;
 import com.devteria.identity_service.exception.ErrorCode;
 import com.devteria.identity_service.repository.UserRepository;
