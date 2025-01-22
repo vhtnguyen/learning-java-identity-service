@@ -1,8 +1,10 @@
 package com.devteria.identity_service.controller;
 
 import com.devteria.identity_service.dto.request.AuthenticationRequest;
+import com.devteria.identity_service.dto.request.IntrospectRequest;
 import com.devteria.identity_service.dto.response.ApiResponse;
 import com.devteria.identity_service.dto.response.AuthenticationResponse;
+import com.devteria.identity_service.dto.response.IntrospectResponse;
 import com.devteria.identity_service.service.AuthenticationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,12 @@ public class AuthenticationController {
     ApiResponse<AuthenticationResponse> authentication(@RequestBody AuthenticationRequest request){
         ApiResponse<AuthenticationResponse> response = new ApiResponse<>();
         response.setResult( authenticationService.authenticate(request));
+        return response;
+    }
+    @PostMapping("/introspect")
+    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request){
+        ApiResponse<IntrospectResponse> response = new ApiResponse<>();
+        response.setResult( authenticationService.introspect(request));
         return response;
     }
 

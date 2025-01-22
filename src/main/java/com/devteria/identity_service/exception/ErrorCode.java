@@ -13,6 +13,7 @@ public enum ErrorCode {
     USER_NOT_EXISTED(1003, "User not exited"),
     PASSWORD_TOO_SHORT(1004, "Password must be at least 6 characters"),
     FIELD_REQUIRED(1005, "Field is required"),
+    UNAUTHENTICATED(1006, "Unauthenticated"),
     INVALID_MESSAGE_KEY(999, "Invalid message key"),
     UNKNOWN_ERROR(666,"Uncategorized exception")
     ;
