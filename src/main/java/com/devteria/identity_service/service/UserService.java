@@ -13,6 +13,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,10 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 public class UserService {
-    @Autowired
     UserRepository userRepository;
-
-    @Autowired
     UserMapper userMapper;
 
     public UserResponse createUser(UserCreationRequest request) {
@@ -33,6 +32,8 @@ public class UserService {
             throw new AppRuntimeException(ErrorCode.USER_EXISTED);
         }
         User user = userMapper.fromUserCreationRequest(request);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         return userMapper.toUserResponse(userRepository.save(user));
 
 
