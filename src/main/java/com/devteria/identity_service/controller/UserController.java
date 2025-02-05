@@ -7,19 +7,25 @@ import com.devteria.identity_service.dto.request.UserPutRequest;
 import com.devteria.identity_service.dto.response.UserResponse;
 import com.devteria.identity_service.service.UserService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@Slf4j
 public class UserController {
     @Autowired
     private UserService userService;
 
     @GetMapping
     ApiResponse<List<UserResponse>> getUsers() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("username: {}",authentication.getName());
+        log.info("roles: {}",authentication.getAuthorities().toString());
         ApiResponse<List<UserResponse>> response = new ApiResponse<>();
         response.setResult(userService.getUsers());
         return response;

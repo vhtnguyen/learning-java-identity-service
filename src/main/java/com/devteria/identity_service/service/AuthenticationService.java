@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
     UserRepository userRepository;
     TokenProvider tokenProvider;
+    PasswordEncoder passwordEncoder;
 
 
 
@@ -44,12 +45,12 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new AppRuntimeException(ErrorCode.USER_NOT_EXISTED));
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
         boolean isAuthenticated= passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!isAuthenticated)
             throw new AppRuntimeException(ErrorCode.UNAUTHENTICATED);
-        var token =  tokenProvider.generateToken(request.getUsername());
+        var token =  tokenProvider.generateToken(user);
 
         return AuthenticationResponse.builder()
                 .token(token)
