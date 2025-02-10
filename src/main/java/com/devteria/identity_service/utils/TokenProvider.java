@@ -19,7 +19,6 @@ import java.text.ParseException;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
 import java.util.Date;
 import java.util.StringJoiner;
 
@@ -75,10 +74,14 @@ public class TokenProvider {
 
     private String buildScope(User user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
-        boolean notHasRole = CollectionUtils.isEmpty(user.getRoles());
-        if (!notHasRole) {
-            user.getRoles().forEach(stringJoiner::add);
-        }
+        boolean hasRole = !CollectionUtils.isEmpty(user.getRoles());
+        if (hasRole)
+            user.getRoles().forEach(role -> {
+                stringJoiner.add("ROLE_" + role.getName());
+                boolean hasPermission = !CollectionUtils.isEmpty(role.getPermissions());
+                if (hasPermission)
+                    role.getPermissions().forEach(permission -> stringJoiner.add(permission.getName()));
+            });
         return stringJoiner.toString();
     }
 }

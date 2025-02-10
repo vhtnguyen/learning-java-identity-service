@@ -1,11 +1,9 @@
 package com.devteria.identity_service.configuration;
 
-import com.devteria.identity_service.enums.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -40,14 +38,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> request
+
                         .requestMatchers(DOCUMENT_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
 
 //                        .requestMatchers(ADMIN_ENDPOINTS).hasRole(Role.ADMIN.name())
 //                        .hasAuthority("SCOPE_ADMIN")
 
-                        .anyRequest().authenticated())
+                        .anyRequest().authenticated()
+                )
                 .csrf(AbstractHttpConfigurer::disable);
+
         http.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer ->
                                 jwtConfigurer
@@ -75,7 +76,7 @@ public class SecurityConfig {
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
         JwtAuthenticationConverter customConverter = new JwtAuthenticationConverter();
         customConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return customConverter;

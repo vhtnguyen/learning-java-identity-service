@@ -4,11 +4,12 @@ import com.devteria.identity_service.dto.request.UserCreationRequest;
 import com.devteria.identity_service.dto.request.UserPatchRequest;
 import com.devteria.identity_service.dto.request.UserPutRequest;
 import com.devteria.identity_service.dto.response.UserResponse;
+import com.devteria.identity_service.entity.Role;
 import com.devteria.identity_service.entity.User;
-import com.devteria.identity_service.enums.Role;
 import com.devteria.identity_service.exception.AppRuntimeException;
 import com.devteria.identity_service.exception.ErrorCode;
 import com.devteria.identity_service.mapper.UserMapper;
+import com.devteria.identity_service.repository.RoleRepository;
 import com.devteria.identity_service.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -16,14 +17,11 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserService {
     UserRepository userRepository;
+    RoleRepository roleRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
@@ -40,8 +39,10 @@ public class UserService {
         }
         User user = userMapper.fromUserCreationRequest(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        Set<String> roles = new HashSet<>();
-        roles.add(Role.USER.name());
+        HashSet<Role> roles = new HashSet<>();
+        var userRole=
+                roleRepository.findById("USER").orElseThrow(()->new AppRuntimeException(ErrorCode.ROLE_NOT_FOUND));
+        roles.add(userRole);
         user.setRoles(roles);
         return userMapper.toUserResponse(userRepository.save(user));
 
@@ -50,7 +51,7 @@ public class UserService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getUsers() {
-        return userRepository.findAll().stream().map(userMapper::toUserResponse).collect(Collectors.toList());
+        return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
     }
 
     public UserResponse getMyInfo() {
@@ -75,6 +76,7 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(String id) {
         userRepository.deleteById(id);
     }
