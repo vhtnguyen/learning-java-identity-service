@@ -30,7 +30,7 @@ public class RoleService {
 
     public RoleResponse createRole(RoleCreationRequest request) {
         Role newRole = roleMapper.fromRoleCreationRequest(request);
-        Set<Permission> permissions = new HashSet<Permission>();
+        Set<Permission> permissions = new HashSet<>();
                 request.getPermissions()
                         .forEach(permissionName -> {
                             var permission =

@@ -3,7 +3,6 @@ package com.devteria.identity_service.controller;
 import com.devteria.identity_service.dto.request.PermissionCreationRequest;
 import com.devteria.identity_service.dto.response.ApiResponse;
 import com.devteria.identity_service.dto.response.PermissionResponse;
-import com.devteria.identity_service.repository.PermissionRepository;
 import com.devteria.identity_service.service.PermissionService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
