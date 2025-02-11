@@ -14,6 +14,7 @@ public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(666, "Uncategorized exception", HttpStatus.INTERNAL_SERVER_ERROR),
     UNAUTHENTICATED(777, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(888, "Unauthorized", HttpStatus.FORBIDDEN),
+    BAD_REQUEST(999, "Bad request", HttpStatus.BAD_REQUEST),
     PERMISSION_NOT_FOUND(1001, "Permission not found", HttpStatus.NOT_FOUND),
     ROLE_NOT_FOUND(1002, "Role not found", HttpStatus.NOT_FOUND),
     USER_EXISTED(1003, "User existed", HttpStatus.BAD_REQUEST),
