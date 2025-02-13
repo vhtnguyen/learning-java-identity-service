@@ -16,3 +16,5 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
+jwt:
+  signerKey: "78f8f2012ec35af521e11105a909b6323855a4f7c80edf5d459b0b92e88c98e6"

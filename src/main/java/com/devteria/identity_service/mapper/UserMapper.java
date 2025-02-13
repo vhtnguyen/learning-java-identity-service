@@ -14,5 +14,7 @@ public interface UserMapper {
     void fromUserUpdateRequest(@MappingTarget User user, UserPutRequest request);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void fromUserPatchRequest(@MappingTarget User user, UserPatchRequest request);
+
+//    @Mapping(target = "roles",ignore = true)
     UserResponse toUserResponse(User user);
 }
